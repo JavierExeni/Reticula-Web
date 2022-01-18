@@ -1,0 +1,138 @@
+<nav ngbNav #nav="ngbNav" class="nav-tabs">
+  <ng-container ngbNavItem>
+    <a ngbNavLink>Tareas</a>
+    <ng-template ngbNavContent>
+      <table *ngIf="tareas.length > 0; else nohay" class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let objTarea of tareas">
+            <td>
+              <strong>{{ objTarea.id }}</strong>
+            </td>
+            <td>{{ objTarea.cliente.nombre }}</td>
+            <td>
+              {{ objTarea.nombre ? objTarea.nombre : "Sin nombre" }}
+            </td>
+            <td>
+              {{ obtenerTipo(objTarea.tipo) | lowercase | titlecase }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #nohay>
+        <app-validationlist
+          msg="No hay Tareas registradas."
+        ></app-validationlist>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+  <ng-container ngbNavItem>
+    <a ngbNavLink>Mantenimientos</a>
+    <ng-template ngbNavContent>
+      <table
+        *ngIf="mantenimientos.length > 0; else nohay"
+        class="table table-striped"
+      >
+        <thead>
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let objTarea of mantenimientos">
+            <td>
+              <strong>{{ objTarea.id }}</strong>
+            </td>
+            <td>{{ objTarea.cliente.nombre }}</td>
+            <td>
+              {{ objTarea.nombre ? objTarea.nombre : "Sin nombre" }}
+            </td>
+            <td>
+              {{ obtenerTipo(objTarea.tipo) | lowercase | titlecase }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #nohay>
+        <app-validationlist
+          msg="No hay Tareas registradas."
+        ></app-validationlist>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+  <ng-container ngbNavItem>
+    <a ngbNavLink>Equipos</a>
+    <ng-template ngbNavContent>
+      <table class="table table-striped" *ngIf="equipos.length > 0; else nohay">
+        <thead>
+          <tr>
+            <th scope="col">Estado</th>
+            <th scope="col">R.A.T.A</th>
+            <th scope="col">Referencia</th>
+            <th scope="col">Equipo</th>
+            <th scope="col">Problema</th>
+            <th scope="col">Costo</th>
+            <th scope="col">Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let objTaller of equipos">
+            <td [style]="getColorState(objTaller.estado)"></td>
+            <td class="align-middle">{{ objTaller.id }}</td>
+            <td class="align-middle">{{ objTaller.referencia }}</td>
+            <td class="align-middle">{{ objTaller.equipo }}</td>
+            <td class="align-middle">{{ objTaller.problema }}</td>
+            <td class="align-middle">{{ objTaller.costo | currency }}</td>
+            <td class="align-middle">
+              {{ obtenerTipo(objTaller.tipo) | lowercase | titlecase }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #nohay>
+        <app-validationlist
+          msg="No hay Trabajos en el taller registrados."
+        ></app-validationlist>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+  <ng-container ngbNavItem>
+    <a ngbNavLink>Ver Documentos</a>
+    <ng-template ngbNavContent>
+      <table class="table table-striped" *ngIf="documentos.length > 0; else nohay">
+        <thead>
+          <tr>
+            <th scope="col">Titulo</th>
+            <th scope="col">Tarea</th>
+            <th scope="col">Carpeta</th>
+            <th scope="col">Ver</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let documento of documentos">
+            <td class="align-middle">{{ documento.titulo }}</td>
+            <td class="align-middle">{{ documento.tarea.nombre }}</td>
+            <td class="align-middle">{{ documento.carpeta.nombre }}</td>
+            <td class="align-middle"> <a [href]="'http://localhost:8080/'+documento.path" target="_blank">Ver Documento</a> </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #nohay>
+        <app-validationlist
+          msg="No hay Documentos registrados."
+        ></app-validationlist>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+</nav>
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

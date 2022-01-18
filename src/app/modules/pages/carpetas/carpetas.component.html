@@ -1,0 +1,94 @@
+<div class="d-flex">
+  <ul
+    ngbNav
+    #nav="ngbNav"
+    class="list-options nav-pills nav_container"
+    orientation="vertical"
+  >
+    <li ngbNavItem="ver_lista">
+      <a ngbNavLink>Ver Lista</a>
+      <ng-template ngbNavContent>
+        <div class="card">
+          <h5 class="card-header">Lista de Carpetas</h5>
+          <div
+            class="card-body p-4 row row-cols-3"
+            style="justify-content: space-between"
+          >
+            <ng-container *ngIf="carpetas.length > 0; else nohay">
+              <div
+                class="card col-3 mx-2 mb-3"
+                style="cursor: pointer"
+                *ngFor="let carpeta of carpetas"
+              >
+                <img
+                  style="width: 200px; margin: auto"
+                  class="card-img-top"
+                  src="../../../assets/images/carpeta.png"
+                />
+                <h5 class="card-title text-center">
+                  {{ carpeta.cliente.nombre }}
+                </h5>
+              </div>
+            </ng-container>
+          </div>
+          <ng-template #nohay>
+            <app-validationlist
+              msg="No hay Carpetas registradas."
+            ></app-validationlist>
+          </ng-template>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem="crear_carpeta">
+      <a ngbNavLink>Nueva Carpeta</a>
+      <ng-template ngbNavContent>
+        <div class="card">
+          <h5 class="card-header">Nueva Carpeta</h5>
+          <app-autocomplete
+            titulo="Seleccionar Cliente"
+            style="padding: 12px 20px"
+            (onDebounce)="sugerencias($event)"
+            [termino]="palabra"
+          ></app-autocomplete>
+
+          <ul
+            *ngIf="clientesSugerencias.length > 0"
+            class="list-group mb-2"
+            style="margin: 0px 16px"
+          >
+            <li
+              style="cursor: pointer"
+              *ngFor="let cliente of clientesSugerencias"
+              class="list-group-item list-group-item-action"
+              (click)="saveClient(cliente)"
+            >
+              {{ cliente.nombre }}
+            </li>
+          </ul>
+          <div class="text-end">
+            <button
+              type="button"
+              style="width: 150px"
+              class="btn btn-primary m-3"
+              (click)="saveCarpeta()"
+            >
+              Crear Carpeta
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem="subir_documento">
+      <a ngbNavLink>Subir Documento</a>
+      <ng-template ngbNavContent>
+        <div class="card">
+          <h5 class="card-header">Seleccionar Documento</h5>
+          <div class="card-body p-3">
+            <app-upload-file [tareas]="tareas"></app-upload-file>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav" class="mt-4 contenedor"></div>
+</div>

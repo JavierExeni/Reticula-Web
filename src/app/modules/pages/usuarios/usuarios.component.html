@@ -1,0 +1,101 @@
+<div class="d-flex">
+  <ul
+    ngbNav
+    #nav="ngbNav"
+    class="list-options nav-pills nav_container"
+    orientation="vertical"
+  >
+    <li ngbNavItem="ver_lista">
+      <a ngbNavLink>Ver Lista</a>
+      <ng-template ngbNavContent>
+        <div class="card">
+          <h5 class="card-header">Lista de Usuarios</h5>
+          <div class="card-body p-3">
+            <table
+              class="table table-striped"
+              *ngIf="usuarios.length > 0; else nohay"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Codigo</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Nombre de Usuario</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let objCliente of usuarios">
+                  <td>
+                    <strong>{{ objCliente.id }}</strong>
+                  </td>
+                  <td>{{ objCliente.nombre }}</td>
+                  <td>{{ objCliente.username }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <ng-template #nohay>
+              <app-validationlist
+                msg="No hay Usuarios registrados."
+              ></app-validationlist>
+            </ng-template>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem="Registro Usuario">
+      <a ngbNavLink>Registrar Usuarios</a>
+      <ng-template ngbNavContent>
+        <div class="card">
+          <h5 class="card-header">Registro de Usuarios</h5>
+          <form
+            [formGroup]="authUser"
+            (ngSubmit)="saveUser()"
+            class="card-body p-3"
+          >
+            <div class="form-group">
+              <label class="control-label">Nombre</label>
+              <input
+                formControlName="nombre"
+                type="text"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label">E-mail</label>
+              <input
+                formControlName="correo"
+                type="text"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label">Nombre De Usuario</label>
+              <input
+                formControlName="username"
+                type="text"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label class="control-label">Contraseña</label>
+              <input
+                formControlName="spassword"
+                type="password"
+                class="form-control"
+              />
+            </div>
+            <div class="text-end">
+              <button
+                [disabled]="authUser.invalid"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Guardar Cliente
+              </button>
+            </div>
+          </form>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav" class="mt-4 contenedor"></div>
+</div>

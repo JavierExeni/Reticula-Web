@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+}
+
+.contenedor {
+  width: 80%;
+  margin-left: 60px;
+  margin-top: 0px !important;
+}
+
+.list-options {
+  border-right: 1px solid lightgray;
+  padding-right: 10px;
+  width: 300px;
+}
+

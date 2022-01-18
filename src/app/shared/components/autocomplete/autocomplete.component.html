@@ -1,0 +1,13 @@
+<form class="card-body" style="padding: 0px" autocomplete="off">
+  <div class="form-group mb-0">
+    <label class="control-label">{{ titulo }}</label>
+    <input
+      type="text"
+      [(ngModel)]="termino"
+      [ngModelOptions]="{ standalone: true }"
+      (input)="teclaPresionada()"
+      [disabled]="disabled"
+      class="form-control"
+    />
+  </div>
+</form>

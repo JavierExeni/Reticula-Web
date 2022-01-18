@@ -1,0 +1,315 @@
+<div class="d-flex">
+  <ul
+    ngbNav
+    #nav="ngbNav"
+    class="list-options nav-pills nav_container"
+    orientation="vertical"
+  >
+    <li ngbNavItem="ver_lista">
+      <a ngbNavLink>Ver Lista</a>
+      <ng-template ngbNavContent>
+        <div class="card">
+          <h5 class="card-header">Lista del Taller</h5>
+          <div class="card-body p-3">
+            <table
+              class="table table-striped"
+              *ngIf="trabajos.length > 0; else nohay"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Estado</th>
+                  <th scope="col">R.A.T.A</th>
+                  <th scope="col">Referencia</th>
+                  <th scope="col">Equipo</th>
+                  <th scope="col">Problema</th>
+                  <th scope="col">Costo</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col" class="text-center">Detalle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let objTaller of trabajos">
+                  <td [style]="getColorState(objTaller.estado)"></td>
+                  <td class="align-middle">{{ objTaller.id }}</td>
+                  <td class="align-middle">{{ objTaller.referencia }}</td>
+                  <td class="align-middle">{{ objTaller.equipo }}</td>
+                  <td class="align-middle">{{ objTaller.problema }}</td>
+                  <td class="align-middle">{{ objTaller.costo | currency }}</td>
+                  <td class="align-middle">
+                    {{ obtenerTipo(objTaller.tipo) | lowercase | titlecase }}
+                  </td>
+                  <td class="overflow-hidden text-center">
+                    <button
+                      (click)="openModal(contenido, objTaller)"
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                    >
+                      <i class="fas fa-user-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ng-template #nohay>
+              <app-validationlist
+                msg="No hay Trabajos en el taller registrados."
+              ></app-validationlist>
+            </ng-template>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+
+    <li ngbNavItem="Nuevo Equipo">
+      <a ngbNavLink>Nuevo Equipo</a>
+      <ng-template ngbNavContent>
+        <div class="card">
+          <h5 class="card-header">Registro Taller</h5>
+          <form
+            class="card-body p-3"
+            [formGroup]="formularioTaller"
+            (ngSubmit)="saveTrabajoTaller()"
+          >
+            <div
+              *ngIf="clientes.length > 0; else nohay"
+              style="margin-bottom: 16px"
+            >
+              <app-autocomplete
+                titulo="Seleccionar Cliente"
+                (onDebounce)="sugerencias($event)"
+                [termino]="palabra"
+              ></app-autocomplete>
+
+              <ul
+                *ngIf="clientesSugerencias.length > 0"
+                class="list-group mb-2"
+                style="margin: 0px 0px"
+              >
+                <li
+                  style="cursor: pointer"
+                  *ngFor="let cliente of clientesSugerencias"
+                  class="list-group-item list-group-item-action"
+                  (click)="saveClient(cliente)"
+                >
+                  {{ cliente.nombre }}
+                </li>
+              </ul>
+            </div>
+            <ng-template #nohay>
+              <app-validationlist
+                msg="No hay Clientes registrados, necesitas clientes para poder registrar un Trabajo."
+              ></app-validationlist>
+            </ng-template>
+
+            <div class="form-group">
+              <label for="txtContacto" class="control-label"
+                >Persona de Contacto:
+              </label>
+              <input
+                id="txtContacto"
+                type="text"
+                class="form-control"
+                formControlName="referencia"
+              />
+            </div>
+            <div class="form-group">
+              <label for="txtEquipo" class="control-label"
+                >Referencia del Equipo:
+              </label>
+              <input
+                id="txtequipo"
+                type="text"
+                class="form-control"
+                formControlName="equipo"
+              />
+            </div>
+            <div class="form-group">
+              <label for="tipo" class="control-label">Tipo: </label>
+              <select
+                id="tipo"
+                name="tipo"
+                class="custom-select my-1 mr-sm-2"
+                formControlName="tipo"
+              >
+                <option [value]="0">Servidor</option>
+                <option [value]="1">PC</option>
+                <option [value]="2">Portatil</option>
+                <option [value]="3">Dispositivo</option>
+                <option [value]="4">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="txtProblema" class="control-label">Problema: </label>
+              <textarea
+                id="txtProblema"
+                formControlName="problema"
+                class="form-control"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="txtToDo" class="control-label">To Do: </label>
+              <textarea
+                id="txtToDo"
+                formControlName="todo"
+                class="form-control"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="txtCosto" class="control-label">Costo: </label>
+              <input
+                id="txtCosto"
+                type="number"
+                class="form-control"
+                formControlName="costo"
+              />
+            </div>
+            <div class="text-end">
+              <button
+                [disabled]="formularioTaller.invalid"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav" class="mt-4 contenedor"></div>
+</div>
+
+<ng-template #contenido let-modal>
+  <div class="modal-header">
+    <h4>Detalles Trabajo</h4>
+    <button
+      class="close"
+      aria-label="close"
+      type="button"
+      (click)="close(modal)"
+    >
+      <i class="far fa-times-circle"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form
+      class="card-body p-1"
+      [formGroup]="formularioTaller"
+      (ngSubmit)="saveTrabajoTaller()"
+    >
+      <div style="margin-bottom: 16px">
+        <app-autocomplete
+          titulo="Seleccionar Cliente"
+          (onDebounce)="sugerencias($event)"
+          [termino]="palabra"
+          [disabled]="true"
+        ></app-autocomplete>
+
+        <ul
+          *ngIf="clientesSugerencias.length > 0"
+          class="list-group mb-2"
+          style="margin: 0px 0px"
+        >
+          <li
+            style="cursor: pointer"
+            *ngFor="let cliente of clientesSugerencias"
+            class="list-group-item list-group-item-action"
+            (click)="saveClient(cliente)"
+          >
+            {{ cliente.nombre }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label for="txtContacto" class="control-label"
+          >Persona de Contacto:
+        </label>
+        <input
+          id="txtContacto"
+          type="text"
+          class="form-control"
+          formControlName="referencia"
+        />
+      </div>
+      <div class="form-group">
+        <label for="txtEquipo" class="control-label"
+          >Referencia del Equipo:
+        </label>
+        <input
+          id="txtequipo"
+          type="text"
+          class="form-control"
+          formControlName="equipo"
+        />
+      </div>
+      <div class="form-group">
+        <label for="tipo" class="control-label">Tipo: </label>
+        <select
+          id="tipo"
+          name="tipo"
+          class="custom-select my-1 mr-sm-2"
+          formControlName="tipo"
+        >
+          <option [value]="0">Servidor</option>
+          <option [value]="1">PC</option>
+          <option [value]="2">Portatil</option>
+          <option [value]="3">Dispositivo</option>
+          <option [value]="4">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="txtProblema" class="control-label">Problema: </label>
+        <textarea
+          id="txtProblema"
+          formControlName="problema"
+          class="form-control"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="txtToDo" class="control-label">To Do: </label>
+        <textarea
+          id="txtToDo"
+          formControlName="todo"
+          class="form-control"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="txtCosto" class="control-label">Costo: </label>
+        <input
+          id="txtCosto"
+          type="number"
+          class="form-control"
+          formControlName="costo"
+        />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer" style="justify-content: space-evenly">
+    <div>
+      <button
+        type="button"
+        class="btn btn-success mr-2"
+        (click)="saveTrabajoTaller(-1); modal.close()"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        (click)="saveTrabajoTaller(1); modal.close()"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="saveTrabajoTaller(0, true); modal.close()"
+    >
+      Aceptar
+    </button>
+  </div>
+</ng-template>

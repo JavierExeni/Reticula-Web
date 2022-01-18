@@ -1,0 +1,41 @@
+<div class="w-50 mx-auto text-center p-5">
+  <h1>Login Reticula</h1>
+  <hr>
+</div>
+
+<div *ngIf="hasError" class="alert alert-danger w-25 mx-auto mb-4" role="alert">
+  <i class="fas fa-exclamation-circle mr-2"></i>
+  <strong>¡Credenciales Incorrectas!</strong>
+</div>
+
+<div class="card w-25 p-4 m-auto">
+  <form [formGroup]="formLogin" (ngSubmit)="login()">
+    <div class="form-group">
+      <label class="control-label">Nombre de Usuario</label>
+      <input
+        type="text"
+        formControlName="username"
+        class="form-control"
+        placeholder="Username"
+      />
+    </div>
+    <div class="form-group">
+      <label class="control-label">Contraseña</label>
+      <input
+        type="password"
+        formControlName="spassword"
+        class="form-control"
+        placeholder="Password"
+      />
+    </div>
+    <div class="text-center">
+      <button
+        [disabled]="formLogin.invalid"
+        type="submit"
+        class="btn btn-primary"
+      >
+        Iniciar Sesion
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,55 @@
+<form>
+  <div class="form-group">
+    <div
+      *ngIf="tareas.length > 0; else nohay"
+      style="margin-bottom: 16px"
+    >
+      <app-autocomplete
+        titulo="Seleccionar Tarea"
+        (onDebounce)="sugerencias_tarea($event)"
+        [termino]="palabra_tarea"
+      ></app-autocomplete>
+
+      <ul
+        *ngIf="tareasSugerencias.length > 0"
+        class="list-group mb-2"
+        style="margin: 0px 0px"
+      >
+        <li
+          style="cursor: pointer"
+          *ngFor="let tarea of tareasSugerencias"
+          class="list-group-item list-group-item-action"
+          (click)="saveTarea(tarea)"
+        >
+          {{ tarea.nombre }}
+        </li>
+      </ul>
+    </div>
+    <ng-template #nohay>
+      <app-validationlist
+        msg="No hay Tareas registradas."
+      ></app-validationlist>
+    </ng-template>
+  </div>
+  <div class="form-group">
+    <label for="txtNombreTarea" class="control-label">
+      Subir Documento:
+    </label>
+    <input
+      class="form-control"
+      type="file"
+      id="formFile"
+      (change)="handleFileInput($event.target)"
+    />
+  </div>
+  <div *ngIf="showBtn" class="text-end">
+    <button
+      type="button"
+      [disabled]="validar()"
+      (click)="validarClienteCarpeta()"
+      class="btn btn-primary text-end"
+    >
+      Guardar
+    </button>
+  </div>
+</form>
