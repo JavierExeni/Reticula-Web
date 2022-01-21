@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { environment } from '../../environments/environment.prod';
 import { Login, AuthResponse, Usuario } from '../shared/models/usuario';
 
@@ -28,6 +29,14 @@ export class AuthService {
         console.log(res);
         localStorage.setItem('user', JSON.stringify(res.data));
         this._usuario = res.data;
+      }),
+      catchError((err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Credenciales Incorrectas!',
+        })
+        return Observable.throw(err);
       })
     );
   }
