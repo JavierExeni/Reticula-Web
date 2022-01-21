@@ -30,7 +30,6 @@ export class UploadFileComponent implements OnInit {
     }
     this.tareas.filter((res: any) => {
       if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
-        console.log(res);
         this.tareasSugerencias.push(res);
       }
     });
@@ -56,7 +55,6 @@ export class UploadFileComponent implements OnInit {
   validarClienteCarpeta() {
     this.carpetaService.validarCarpeta(this.tarea.cliente.lpersona_id!).subscribe(
       (res: any) => {
-        console.log(res);
         if (res.res == 'success') {
           this.carpeta_id = res.data.id;
           this.upload();
@@ -79,7 +77,6 @@ export class UploadFileComponent implements OnInit {
       .subscribe(
         (res: any) => {
           Swal.fire('Cargado!', 'El Documento ha sido subido.', 'success');
-          console.log(res);
           if (this.modal) {
             this.modal.close();
           }

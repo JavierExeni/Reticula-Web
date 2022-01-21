@@ -32,9 +32,7 @@ export class HeaderComponent implements OnInit {
         )
       )
     ).subscribe((data:any) => {
-      this.notifications = data.filter((res: any) => res.user.id != this.authService.usuario.id);
-      console.log(this.notifications);
-
+      this.notifications = data.filter((res: any) => res.user.id != this.authService.usuario.id).slice(data.length-5);
     });
   }
 

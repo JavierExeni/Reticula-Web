@@ -96,11 +96,8 @@ export class TesseractComponent implements OnInit {
       };
     }
 
-    console.log(taller);
-
     this.tallerService.insert(taller).subscribe(
       (res: any) => {
-        console.log(res);
         this.formularioTaller.reset();
         if (action == 0) {
           this.registrarNotifiaction(flag ? 'Actualizó un Trabajo' : `R.A.T.A ${taller.codigo_id}, Se ingresó el equipo ${taller.equipo}: ${taller.cliente.nombre}`, flag ? 0 : 1);
@@ -139,7 +136,6 @@ export class TesseractComponent implements OnInit {
 
   obtenerEstado(action: number): number {
     let state = this.tallerSelected.estado;
-    console.log('estado: ', state);
 
     if (action == 0) {
       return state;
@@ -186,8 +182,6 @@ export class TesseractComponent implements OnInit {
 
   getTrabajos() {
     this.tallerService.list().subscribe((res: any) => {
-      console.log(res);
-
       this.trabajos = res;
       this.auxtrabajos = res;
     });
@@ -242,7 +236,6 @@ export class TesseractComponent implements OnInit {
   }
 
   close(modal: any) {
-    console.log('cerrado');
     this.formularioTaller.reset();
     this.formularioTaller.get('problema')?.enable();
     this.formularioTaller.get('tipo')?.enable();

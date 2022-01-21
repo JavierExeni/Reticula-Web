@@ -43,7 +43,6 @@ export class UsuariosComponent implements OnInit {
 
     this.userService.insert(user).subscribe(
       (res) => {
-        console.log(res);
         this.authUser.reset();
         this.registrarNotifiaction('Registró un nuevo Usuario', 1);
         Swal.fire({

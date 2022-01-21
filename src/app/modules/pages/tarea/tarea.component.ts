@@ -69,8 +69,6 @@ export class TareaComponent implements OnInit {
 
     var tarea!: Tareas;
 
-    console.log(fecha_limite);
-
     if (this.tareaSelected) {
       estado = this.obtenerEstado(action);
       tarea = {
@@ -98,7 +96,6 @@ export class TareaComponent implements OnInit {
     }
     this.tareaService.insert(tarea).subscribe(
       (res) => {
-        console.log(res);
         this.formularioTareas.reset();
 
         if (action == 0) {
@@ -163,9 +160,6 @@ export class TareaComponent implements OnInit {
       return;
     }
     this.clientes.filter((res: any) => {
-      console.log(res);
-      console.log(termino);
-
       if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
         this.clientesSugerencias.push(res);
       }
@@ -174,8 +168,6 @@ export class TareaComponent implements OnInit {
 
   getTareas() {
     this.tareaService.list().subscribe((res: any) => {
-      console.log(res);
-
       this.tareas = res;
       this.auxtareas = res;
     });

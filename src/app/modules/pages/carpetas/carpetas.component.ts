@@ -33,9 +33,7 @@ export class CarpetasComponent implements OnInit {
     return this.clienteService.clientes;
   }
 
-  get carpetas() {
-    return this.carpetaService.carpetas;
-  }
+  carpetas: Carpeta[] = [];
 
   tareas: TareasResponse[] = [];
 
@@ -118,7 +116,6 @@ export class CarpetasComponent implements OnInit {
 
   handleFileInput(files: any) {
     this.fileToUpload = files.files.item(0)!;
-    console.log(this.fileToUpload);
   }
 
   sugerencias(termino: string) {
@@ -127,9 +124,6 @@ export class CarpetasComponent implements OnInit {
       return;
     }
     this.clientes.filter((res: any) => {
-      console.log(res);
-      console.log(termino);
-
       if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
         this.clientesSugerencias.push(res);
       }
@@ -143,7 +137,6 @@ export class CarpetasComponent implements OnInit {
     }
     this.tareas.filter((res: any) => {
       if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
-        console.log(res);
         this.tareasSugerencias.push(res);
       }
     });
@@ -152,7 +145,6 @@ export class CarpetasComponent implements OnInit {
   getTareas() {
     this.tareaService.list().subscribe(
       (res: any) => {
-        console.log(res);
         this.tareas = res;
       },
       (err) => {
@@ -166,7 +158,9 @@ export class CarpetasComponent implements OnInit {
   }
 
   getCarpetas() {
-    this.carpetaService.list().subscribe();
+    this.carpetaService.list().subscribe((res: any) => {
+      this.carpetas = res;
+    });
   }
 
   validar(): boolean {
@@ -177,20 +171,21 @@ export class CarpetasComponent implements OnInit {
   }
 
   validarClienteCarpeta() {
-    this.carpetaService.validarCarpeta(this.tarea.cliente.lpersona_id!).subscribe(
-      (res: any) => {
-        console.log(res);
-        if (res.res == 'success') {
-          this.carpeta_id = res.data.id;
-          this.upload();
-        } else {
-          Swal.fire('Ups!', res.data, 'error');
+    this.carpetaService
+      .validarCarpeta(this.tarea.cliente.lpersona_id!)
+      .subscribe(
+        (res: any) => {
+          if (res.res == 'success') {
+            this.carpeta_id = res.data.id;
+            this.upload();
+          } else {
+            Swal.fire('Ups!', res.data, 'error');
+          }
+        },
+        (err) => {
+          console.log(err);
         }
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+      );
   }
 
   upload() {
@@ -200,7 +195,6 @@ export class CarpetasComponent implements OnInit {
         (res: any) => {
           this.registrarNotifiaction('Subió un nuevo Documento', 1);
           Swal.fire('Cargado!', 'El Documento ha sido subido.', 'success');
-          console.log(res);
         },
         (err) => {
           console.log(err);

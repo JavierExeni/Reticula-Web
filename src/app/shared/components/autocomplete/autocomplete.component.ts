@@ -1,12 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Cliente } from '../../models/clientes';
 
 @Component({
   selector: 'app-autocomplete',
   templateUrl: './autocomplete.component.html',
-  styleUrls: ['./autocomplete.component.scss'],
 })
 export class AutocompleteComponent implements OnInit {
   @Output() onDebounce: EventEmitter<string> = new EventEmitter();
@@ -15,8 +13,6 @@ export class AutocompleteComponent implements OnInit {
   @Input() titulo: string = '';
 
   debouncer: Subject<string> = new Subject();
-
-  //termino: string = '';
 
   constructor() {}
 

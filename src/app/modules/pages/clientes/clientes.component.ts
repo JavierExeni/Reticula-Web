@@ -46,7 +46,6 @@ export class ClientesComponent implements OnInit {
     };
 
     this.clienteService.insert(cliente).subscribe((res: any) => {
-      console.log(res);
       if (res.res === 'success') {
         this.formularioClientes.reset();
         this.registrarNotifiaction('Registró un nuevo Cliente', 1);
