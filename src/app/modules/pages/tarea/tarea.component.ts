@@ -13,12 +13,17 @@ import { ClientesService } from '../../services/clientes.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ESTADOS } from '../../../shared/models/tareas';
 import * as moment from 'moment';
+import { NotificationService } from '../../services/notification.service';
+import { fireNotification } from '../../../shared/models/notification';
 
 @Component({
   selector: 'app-tarea',
   templateUrl: './tarea.component.html',
 })
 export class TareaComponent implements OnInit {
+  page = 1;
+  pageSize = 10;
+
   clientesSugerencias: Cliente[] = [];
 
   palabra: string = '';
@@ -33,9 +38,8 @@ export class TareaComponent implements OnInit {
     descripcion: ['', Validators.required],
   });
 
-  get tareas() {
-    return this.tareaService.tareas;
-  }
+  tareas: TareasResponse[] = [];
+  auxtareas: TareasResponse[] = [];
 
   get clientes() {
     return this.clienteService.clientes;
@@ -46,8 +50,11 @@ export class TareaComponent implements OnInit {
     private tareaService: TareaService,
     private authService: AuthService,
     private clienteService: ClientesService,
+    private notification: NotificationService,
     public modal: NgbModal
   ) {}
+
+  tutorial!: fireNotification;
 
   ngOnInit(): void {
     this.getTareas();
@@ -60,9 +67,9 @@ export class TareaComponent implements OnInit {
 
     let estado = 0;
 
-    console.log(estado);
-
     var tarea!: Tareas;
+
+    console.log(fecha_limite);
 
     if (this.tareaSelected) {
       estado = this.obtenerEstado(action);
@@ -71,7 +78,7 @@ export class TareaComponent implements OnInit {
         cliente: { id: this.cliente.id! },
         nombre,
         tipo,
-        fecha_limite,
+        fecha_limite: this.tareaSelected.fecha_limite,
         descripcion,
         usuario: { id: this.authService.usuario.id! },
         estado,
@@ -89,13 +96,13 @@ export class TareaComponent implements OnInit {
         carpeta: null,
       };
     }
-
     this.tareaService.insert(tarea).subscribe(
       (res) => {
         console.log(res);
         this.formularioTareas.reset();
 
         if (action == 0) {
+          this.registrarNotifiaction(flag ? 'Actualizó una Tarea' : 'Registro una nueva Tarea', flag ? 0 : 1);
           Swal.fire({
             icon: 'success',
             title: flag ? 'Tarea Actualizada' : 'Tarea Registrada',
@@ -103,6 +110,7 @@ export class TareaComponent implements OnInit {
             timer: 2000,
           });
         } else {
+          this.registrarNotifiaction(`Paso de Estado ${tarea.nombre} tarea.` , 0);
           Swal.fire({
             icon: 'success',
             title: `Estado paso a ${ESTADOS[tarea.estado]}`,
@@ -120,15 +128,12 @@ export class TareaComponent implements OnInit {
 
   obtenerEstado(action: number): number {
     let state = this.tareaSelected.estado;
-    console.log('estado: ', state);
 
     if (action == 0) {
       return state;
     }
 
     if (action == -1) {
-      console.log('Derecha');
-
       if (this.tareaSelected.estado == -1) {
         console.log('No hay un estado menor');
         state = -1;
@@ -137,7 +142,6 @@ export class TareaComponent implements OnInit {
       state = state - 1;
       return state;
     } else {
-      console.log('Izquierda');
       if (this.tareaSelected.estado == 3) {
         console.log('No puedes subir más estados');
         return 3;
@@ -163,7 +167,12 @@ export class TareaComponent implements OnInit {
   }
 
   getTareas() {
-    this.tareaService.list().subscribe();
+    this.tareaService.list().subscribe((res: any) => {
+      console.log(res);
+
+      this.tareas = res;
+      this.auxtareas = res;
+    });
   }
 
   getClientes() {
@@ -180,7 +189,7 @@ export class TareaComponent implements OnInit {
     this.clientesSugerencias = [];
   }
 
-  obtenerTipo(tipo: string) {
+  obtenerTipo(tipo: number) {
     return TIPO_TAREA[Number(tipo)];
   }
 
@@ -226,5 +235,47 @@ export class TareaComponent implements OnInit {
   close(modal: any) {
     this.formularioTareas.reset();
     modal.dismiss();
+  }
+
+  search(event: any) {
+    let termino = event.target.value;
+
+    if (termino === '') {
+      this.tareas = this.auxtareas;
+      return;
+    }
+    this.tareas = [];
+    this.auxtareas.filter((res: any) => {
+      if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
+        this.tareas.push(res);
+      }
+    });
+  }
+
+  filter(tipo: number) {
+    this.tareas = [];
+    switch (tipo) {
+      case -1:
+        this.tareas = this.auxtareas;
+        break;
+      case 0:
+        this.tareas = this.auxtareas.filter((res) => res.tipo == 0);
+        break;
+      case 1:
+        this.tareas = this.auxtareas.filter((res) => res.tipo == 1);
+        break;
+      case 2:
+        this.tareas = this.auxtareas.filter((res) => res.tipo == 2);
+        break;
+    }
+  }
+
+  registrarNotifiaction(name: string, type: number) {
+    let body: fireNotification = {
+      eventname: name,
+      eventtype: type,
+      user: this.authService.usuario,
+    };
+    this.notification.create(body).subscribe((res: any) => console.log);
   }
 }

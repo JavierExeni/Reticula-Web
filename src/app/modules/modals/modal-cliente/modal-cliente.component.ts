@@ -24,7 +24,7 @@ export class ModalClienteComponent implements OnInit {
   constructor(
     private tareaService: TareaService,
     private tallerService: TallerService,
-    private carpetService: CarpetaService
+    private carpetaService: CarpetaService
   ) {}
 
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class ModalClienteComponent implements OnInit {
   }
 
   getDocuemntos() {
-    this.carpetService.documentoByCliente(this.cliente.id!).subscribe(
+    this.carpetaService.documentoByCliente(this.cliente.id!).subscribe(
       (res: any) => {
         this.documentos = res;
       },

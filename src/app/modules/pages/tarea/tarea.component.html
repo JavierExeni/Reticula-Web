@@ -11,6 +11,23 @@
         <div class="card">
           <h5 class="card-header">Lista de Tareas</h5>
           <div class="card-body p-3">
+            <div class="d-flex justify-content-between mb-3">
+              <div class="input-group buscador d-flex w-50">
+                <input
+                  type="text"
+                  (input)="search($event)"
+                  class="form-control"
+                />
+                <span class="input-group-text" id="basic-addon1">
+                  <i class="fas fa-search"></i>
+                </span>
+              </div>
+              <button type="button" class="btn btn-primary fw-bold" (click)="filter(-1)" >Todo</button>
+              <button type="button" class="btn btn-success fw-bold" (click)="filter(2)">Tareas</button>
+              <button type="button" class="btn btn-info fw-bold" (click)="filter(1)">Mantenimientos</button>
+              <button type="button" class="btn btn-warning fw-bold" (click)="filter(0)">Asistencias</button>
+            </div>
+
             <table
               *ngIf="tareas.length > 0; else nohay"
               class="table table-striped"
@@ -26,7 +43,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let objTarea of tareas">
+                <tr
+                  *ngFor="
+                    let objTarea of tareas
+                      | slice: (page - 1) * pageSize:page * pageSize
+                  "
+                >
                   <td>
                     <strong>{{ objTarea.id }}</strong>
                   </td>
@@ -58,6 +80,12 @@
                 </tr>
               </tbody>
             </table>
+            <ngb-pagination
+              class="d-flex justify-content-center"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="tareas.length"
+            ></ngb-pagination>
             <ng-template #nohay>
               <app-validationlist
                 msg="No hay Tareas registradas."
@@ -90,7 +118,7 @@
               <ul
                 *ngIf="clientesSugerencias.length > 0"
                 class="list-group mb-2"
-                style="margin: 0px 0px"
+                style="margin: 0px 0px; height: 400px; overflow: auto;"
               >
                 <li
                   style="cursor: pointer"

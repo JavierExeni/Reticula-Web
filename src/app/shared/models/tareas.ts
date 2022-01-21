@@ -22,7 +22,7 @@ export interface TareasResponse {
   id: number;
   nombre: string;
   descripcion: string;
-  tipo: string;
+  tipo: number;
   estado: number;
   carpeta: null;
   fecha_registro?: Date;

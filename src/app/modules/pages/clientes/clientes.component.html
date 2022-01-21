@@ -11,9 +11,15 @@
         <div class="card">
           <h5 class="card-header">Lista de Clientes</h5>
           <div class="card-body p-3">
-            <div class="form-group buscador d-flex w-50">
-              <input type="text" class="form-control" />
-              <button class="btn btn-primary btn_buscar ml-3">Buscar</button>
+            <div class="input-group buscador d-flex w-50 mb-2">
+              <input
+                type="text"
+                (input)="search($event)"
+                class="form-control"
+              />
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fas fa-search"></i>
+              </span>
             </div>
 
             <table
@@ -28,7 +34,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let objCliente of clientes">
+                <tr
+                  *ngFor="
+                    let objCliente of clientes
+                      | slice: (page - 1) * pageSize:page * pageSize
+                  "
+                >
                   <td class="align-middle">
                     <strong> {{ objCliente.id }}</strong>
                   </td>
@@ -45,6 +56,12 @@
                 </tr>
               </tbody>
             </table>
+            <ngb-pagination
+              class="d-flex justify-content-center"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="clientes.length"
+            ></ngb-pagination>
             <ng-template #nohay>
               <app-validationlist
                 msg="No hay Clientes registrados."

@@ -12,6 +12,8 @@ import { AuthService } from '../../../auth/auth.service';
 import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ESTADOS } from 'src/app/shared/models/tareas';
+import { NotificationService } from '../../services/notification.service';
+import { fireNotification } from '../../../shared/models/notification';
 
 @Component({
   selector: 'app-tesseract',
@@ -19,6 +21,8 @@ import { ESTADOS } from 'src/app/shared/models/tareas';
   styles: [],
 })
 export class TesseractComponent implements OnInit {
+  page = 1;
+  pageSize = 10;
   clientesSugerencias: Cliente[] = [];
 
   palabra: string = '';
@@ -39,16 +43,16 @@ export class TesseractComponent implements OnInit {
     return this.clienteService.clientes;
   }
 
-  get trabajos() {
-    return this.tallerService.trabajos;
-  }
+  trabajos: TrabajoTallerResponse[] = [];
+  auxtrabajos: TrabajoTallerResponse[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private clienteService: ClientesService,
     private tallerService: TallerService,
     private authService: AuthService,
-    public modal: NgbModal
+    public modal: NgbModal,
+    private notification: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +60,7 @@ export class TesseractComponent implements OnInit {
     this.getTrabajos();
   }
 
-  saveTrabajoTaller(action = 0, flag = false) {
+  saveTrabajoTaller(action = 0, flag = false, modal: any) {
     const { referencia, equipo, tipo, problema, todo, costo } =
       this.formularioTaller.value;
 
@@ -99,6 +103,7 @@ export class TesseractComponent implements OnInit {
         console.log(res);
         this.formularioTaller.reset();
         if (action == 0) {
+          this.registrarNotifiaction(flag ? 'Actualizó un Trabajo' : 'Registró un nuevo Trabajo', flag ? 0 : 1);
           Swal.fire({
             icon: 'success',
             title: flag ? 'Trabajo Actualizado' : 'Trabajo Registrado',
@@ -106,6 +111,7 @@ export class TesseractComponent implements OnInit {
             timer: 2000,
           });
         } else {
+          this.registrarNotifiaction(`R.A.T.A ${taller} actualización de estado a ${ESTADOS[estado]}.` , 0);
           Swal.fire({
             icon: 'success',
             title: `Estado paso a ${ESTADOS[taller.estado]}`,
@@ -114,11 +120,21 @@ export class TesseractComponent implements OnInit {
           });
         }
         this.getTrabajos();
+        this.close(modal);
       },
       (err) => {
         console.log(err);
       }
     );
+  }
+
+  registrarNotifiaction(name: string, type: number) {
+    let body: fireNotification = {
+      eventname: name,
+      eventtype: type,
+      user: this.authService.usuario,
+    };
+    this.notification.create(body).subscribe((res: any) => console.log);
   }
 
   obtenerEstado(action: number): number {
@@ -156,9 +172,6 @@ export class TesseractComponent implements OnInit {
       return;
     }
     this.clientes.filter((res: any) => {
-      console.log(res);
-      console.log(termino);
-
       if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
         this.clientesSugerencias.push(res);
       }
@@ -172,7 +185,12 @@ export class TesseractComponent implements OnInit {
   }
 
   getTrabajos() {
-    this.tallerService.list().subscribe();
+    this.tallerService.list().subscribe((res: any) => {
+      console.log(res);
+
+      this.trabajos = res;
+      this.auxtrabajos = res;
+    });
   }
 
   getClientes() {
@@ -183,19 +201,19 @@ export class TesseractComponent implements OnInit {
     let color = 'red';
     switch (estado) {
       case 0:
-        color = 'rgb(29, 14, 109);';
+        color = '#1dae6d;';
         break;
       case 1:
-        color = 'rgb(31, 101, 232);';
+        color = '#1fb5e8;';
         break;
       case 2:
-        color = 'rgb(0, 128, 189);';
+        color = '#0080bd;';
         break;
       case 3:
-        color = 'gray;';
+        color = '#888888;';
         break;
       case -1:
-        color = 'rgb(255, 86, 57);';
+        color = '#ff5639;';
         break;
     }
 
@@ -231,5 +249,44 @@ export class TesseractComponent implements OnInit {
     this.formularioTaller.get('equipo')?.enable();
     this.palabra = '';
     modal.dismiss();
+  }
+
+  search(event: any) {
+    let termino = event.target.value;
+
+    if (termino === '') {
+      this.trabajos = this.auxtrabajos;
+      return;
+    }
+    this.trabajos = [];
+    this.auxtrabajos.filter((res: any) => {
+      if (res.referencia.toLowerCase().includes(termino.toLowerCase().trim())) {
+        this.trabajos.push(res);
+      }
+    });
+  }
+
+  filter(tipo: number) {
+    this.trabajos = [];
+    switch (tipo) {
+      case -2:
+        this.trabajos = this.auxtrabajos;
+        break;
+      case -1:
+        this.trabajos = this.auxtrabajos.filter((res) => res.estado == -1);
+        break;
+      case 0:
+        this.trabajos = this.auxtrabajos.filter((res) => res.estado == 0);
+        break;
+      case 1:
+        this.trabajos = this.auxtrabajos.filter((res) => res.estado == 1);
+        break;
+      case 2:
+        this.trabajos = this.auxtrabajos.filter((res) => res.estado == 2);
+        break;
+      case 3:
+        this.trabajos = this.auxtrabajos.filter((res) => res.estado == 3);
+        break;
+    }
   }
 }

@@ -12,13 +12,14 @@
           <h5 class="card-header">Lista de Carpetas</h5>
           <div
             class="card-body p-4 row row-cols-3"
-            style="justify-content: space-between"
+            [ngStyle]="{'justify-content': (carpetas.length > 2) ? 'space-between' : ''}"
           >
             <ng-container *ngIf="carpetas.length > 0; else nohay">
               <div
                 class="card col-3 mx-2 mb-3"
                 style="cursor: pointer"
                 *ngFor="let carpeta of carpetas"
+                (click)="openModal(detail, carpeta)"
               >
                 <img
                   style="width: 200px; margin: auto"
@@ -46,7 +47,7 @@
           <h5 class="card-header">Nueva Carpeta</h5>
           <app-autocomplete
             titulo="Seleccionar Cliente"
-            style="padding: 12px 20px"
+            style="padding: 12px 20px; padding-bottom: 0px;"
             (onDebounce)="sugerencias($event)"
             [termino]="palabra"
           ></app-autocomplete>
@@ -54,7 +55,7 @@
           <ul
             *ngIf="clientesSugerencias.length > 0"
             class="list-group mb-2"
-            style="margin: 0px 16px"
+            style="margin: 0px 20px; height: 400px; overflow: auto;"
           >
             <li
               style="cursor: pointer"
@@ -92,3 +93,42 @@
   </ul>
   <div [ngbNavOutlet]="nav" class="mt-4 contenedor"></div>
 </div>
+
+<ng-template #detail let-modal>
+  <div class="modal-header">
+    <h4>Detalles Documento</h4>
+    <button
+      class="close"
+      aria-label="close"
+      type="button"
+      (click)="close(modal)"
+    >
+      <i class="far fa-times-circle"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped" *ngIf="documentos.length > 0; else nohay">
+      <thead>
+        <tr>
+          <th scope="col">Titulo</th>
+          <th scope="col">Tarea</th>
+          <th scope="col">Carpeta</th>
+          <th scope="col">Ver</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let documento of documentos">
+          <td class="align-middle">{{ documento.titulo }}</td>
+          <td class="align-middle">{{ documento.tarea.nombre }}</td>
+          <td class="align-middle">{{ documento.carpeta.nombre }}</td>
+          <td class="align-middle"> <a [href]="'http://localhost:8080/'+documento.path" target="_blank">Ver Documento</a> </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #nohay>
+      <app-validationlist
+        msg="No hay Documentos registrados."
+      ></app-validationlist>
+    </ng-template>
+  </div>
+</ng-template>

@@ -7,6 +7,11 @@ import Swal from 'sweetalert2';
 import { TareasResponse } from '../../../shared/models/tareas';
 import { TareaService } from '../../services/tarea.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Documento } from '../../../shared/models/documento';
+import { NotificationService } from '../../services/notification.service';
+import { AuthService } from '../../../auth/auth.service';
+import { fireNotification } from '../../../shared/models/notification';
 
 @Component({
   selector: 'app-carpetas',
@@ -21,6 +26,8 @@ export class CarpetasComponent implements OnInit {
 
   palabra_tarea: string = '';
   tarea!: TareasResponse;
+
+  documentos: Documento[] = [];
 
   get clientes() {
     return this.clienteService.clientes;
@@ -40,12 +47,26 @@ export class CarpetasComponent implements OnInit {
     private clienteService: ClientesService,
     private carpetaService: CarpetaService,
     private tareaService: TareaService,
+    public modal: NgbModal,
+    private authService: AuthService,
+    private notification: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.getClientes();
     this.getCarpetas();
     this.getTareas();
+  }
+
+  getDocuemntos(id: number) {
+    this.carpetaService.documentoByCliente(id).subscribe(
+      (res: any) => {
+        this.documentos = res;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   saveCarpeta() {
@@ -60,6 +81,7 @@ export class CarpetasComponent implements OnInit {
       (res) => {
         this.palabra = '';
         this.clientesSugerencias = [];
+        this.registrarNotifiaction('Registró un nueva Carpeta', 1);
         Swal.fire({
           icon: 'success',
           title: 'Cliente Registrado',
@@ -72,6 +94,15 @@ export class CarpetasComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  registrarNotifiaction(name: string, type: number) {
+    let body: fireNotification = {
+      eventname: name,
+      eventtype: type,
+      user: this.authService.usuario,
+    };
+    this.notification.create(body).subscribe((res: any) => console.log);
   }
 
   saveClient(cliente: Cliente) {
@@ -167,6 +198,7 @@ export class CarpetasComponent implements OnInit {
       .subirDocumento(this.tarea.id!, this.carpeta_id, this.fileToUpload)
       .subscribe(
         (res: any) => {
+          this.registrarNotifiaction('Subió un nuevo Documento', 1);
           Swal.fire('Cargado!', 'El Documento ha sido subido.', 'success');
           console.log(res);
         },
@@ -175,5 +207,15 @@ export class CarpetasComponent implements OnInit {
           Swal.fire('Ups!', 'Hubo un error en la carga.', 'error');
         }
       );
+  }
+
+  openModal(upload: any, carpeta: Carpeta) {
+    //this.tareaSelected = tarea;
+    this.getDocuemntos(carpeta.id!);
+    this.modal.open(upload, { centered: true, backdrop: 'static', size: 'xl' });
+  }
+
+  close(modal: any) {
+    modal.dismiss();
   }
 }

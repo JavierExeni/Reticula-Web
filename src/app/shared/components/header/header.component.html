@@ -1,35 +1,96 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary py-3">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Retícula</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" [routerLink]="['/menu/tareas']" routerLinkActive="active">Tareas</a>
+          <a
+            class="nav-link"
+            aria-current="page"
+            [routerLink]="['/menu/tareas']"
+            routerLinkActive="active"
+            >Tareas</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/menu/taller']" routerLinkActive="active" >Tesseract</a>
+          <a
+            class="nav-link"
+            [routerLink]="['/menu/taller']"
+            routerLinkActive="active"
+            >Tesseract</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/menu/clientes']" routerLinkActive="active">Clientes</a>
+          <a
+            class="nav-link"
+            [routerLink]="['/menu/clientes']"
+            routerLinkActive="active"
+            >Clientes</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/menu/usuarios']" routerLinkActive="active">Usuarios</a>
+          <a
+            class="nav-link"
+            [routerLink]="['/menu/usuarios']"
+            routerLinkActive="active"
+            >Usuarios</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/menu/carpetas']" routerLinkActive="active">Carpetas</a>
+          <a
+            class="nav-link"
+            [routerLink]="['/menu/carpetas']"
+            routerLinkActive="active"
+            >Carpetas</a
+          >
         </li>
       </ul>
 
       <div>
-        <button class="btn btn-outline-light" type="button" (click)="logout()">Cerrar Sesión</button>
-        <button class="btn btn-outline-light ml-2">
-          <i class="fas fa-bell"></i>
+        <button class="btn btn-outline-light" type="button" (click)="logout()">
+          Cerrar Sesión
         </button>
-      </div>
 
+        <div ngbDropdown display="dynamic" class="d-inline-block">
+          <button
+            class="btn btn-outline-light position-relative ml-2"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            <i class="fas fa-bell"></i>
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >
+              {{ notifications.length }}
+              <span class="visually-hidden">unread messages</span>
+            </span>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <ng-container *ngIf="notifications.length > 0; else nohay">
+              <button *ngFor="let not of notifications" ngbDropdownItem>
+                <strong>{{ not.user.username | titlecase }}:</strong>
+                {{ not.eventname }}
+              </button>
+            </ng-container>
+            <ng-template #nohay>
+              <h6 class="text-center">No tienes notificaciones.</h6>
+            </ng-template>
+
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
