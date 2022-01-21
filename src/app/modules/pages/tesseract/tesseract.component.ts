@@ -71,15 +71,15 @@ export class TesseractComponent implements OnInit {
     if (this.tallerSelected) {
       estado = this.obtenerEstado(action);
       taller = {
-        id: this.tallerSelected.id,
+        codigo_id: this.tallerSelected.codigo_id,
         referencia,
         equipo: this.tallerSelected.equipo,
         tipo: this.tallerSelected.tipo,
         problema: this.tallerSelected.problema,
         todo,
         costo,
-        cliente: { id: this.cliente.id! },
-        usuario: { id: this.authService.usuario.id! },
+        cliente: { lpersona_id: this.cliente.lpersona_id! },
+        usuario: { codigo_id: this.authService.usuario.id! },
         estado: estado,
       };
     } else {
@@ -90,8 +90,8 @@ export class TesseractComponent implements OnInit {
         problema,
         todo,
         costo,
-        cliente: { id: this.cliente.id! },
-        usuario: { id: this.authService.usuario.id! },
+        cliente: { lpersona_id: this.cliente.lpersona_id! },
+        usuario: { codigo_id: this.authService.usuario.codigo_id! },
         estado,
       };
     }
@@ -103,7 +103,7 @@ export class TesseractComponent implements OnInit {
         console.log(res);
         this.formularioTaller.reset();
         if (action == 0) {
-          this.registrarNotifiaction(flag ? 'Actualizó un Trabajo' : 'Registró un nuevo Trabajo', flag ? 0 : 1);
+          this.registrarNotifiaction(flag ? 'Actualizó un Trabajo' : `R.A.T.A ${taller.codigo_id}, Se ingresó el equipo ${taller.equipo}: ${taller.cliente.nombre}`, flag ? 0 : 1);
           Swal.fire({
             icon: 'success',
             title: flag ? 'Trabajo Actualizado' : 'Trabajo Registrado',
@@ -111,7 +111,7 @@ export class TesseractComponent implements OnInit {
             timer: 2000,
           });
         } else {
-          this.registrarNotifiaction(`R.A.T.A ${taller} actualización de estado a ${ESTADOS[estado]}.` , 0);
+          this.registrarNotifiaction(`R.A.T.A ${taller.codigo_id}, El equipo ${taller.equipo} del cliente ${taller.cliente.nombre} cambio de estado a ${ESTADOS[estado]}.` , 0);
           Swal.fire({
             icon: 'success',
             title: `Estado paso a ${ESTADOS[taller.estado]}`,

@@ -75,23 +75,23 @@ export class TareaComponent implements OnInit {
       estado = this.obtenerEstado(action);
       tarea = {
         id: this.tareaSelected.id,
-        cliente: { id: this.cliente.id! },
+        cliente: { lpersona_id: this.cliente.lpersona_id! },
         nombre,
         tipo,
         fecha_limite: this.tareaSelected.fecha_limite,
         descripcion,
-        usuario: { id: this.authService.usuario.id! },
+        usuario: { codigo_id: this.authService.usuario.codigo_id! },
         estado,
         carpeta: null,
       };
     } else {
       tarea = {
-        cliente: { id: this.cliente.id! },
+        cliente: { lpersona_id: this.cliente.lpersona_id! },
         nombre,
         tipo,
         fecha_limite,
         descripcion,
-        usuario: { id: this.authService.usuario.id! },
+        usuario: { codigo_id: this.authService.usuario.codigo_id! },
         estado,
         carpeta: null,
       };
@@ -102,7 +102,10 @@ export class TareaComponent implements OnInit {
         this.formularioTareas.reset();
 
         if (action == 0) {
-          this.registrarNotifiaction(flag ? 'Actualizó una Tarea' : 'Registro una nueva Tarea', flag ? 0 : 1);
+          this.registrarNotifiaction(
+            flag ? 'Actualizó una Tarea' : 'Registro una nueva Tarea',
+            flag ? 0 : 1
+          );
           Swal.fire({
             icon: 'success',
             title: flag ? 'Tarea Actualizada' : 'Tarea Registrada',
@@ -110,7 +113,10 @@ export class TareaComponent implements OnInit {
             timer: 2000,
           });
         } else {
-          this.registrarNotifiaction(`Paso de Estado ${tarea.nombre} tarea.` , 0);
+          this.registrarNotifiaction(
+            `Paso de Estado ${tarea.nombre} tarea.`,
+            0
+          );
           Swal.fire({
             icon: 'success',
             title: `Estado paso a ${ESTADOS[tarea.estado]}`,

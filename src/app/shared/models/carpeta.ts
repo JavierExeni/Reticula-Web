@@ -1,10 +1,10 @@
 
 
 export interface Carpeta {
-  id?: number;
+  codigo_id?: number;
   nombre: string;
   cliente: {
-    id: number;
+    lpersona_id: number;
     nombre?: string
   };
 }

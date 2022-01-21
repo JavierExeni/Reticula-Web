@@ -54,7 +54,7 @@ export class UploadFileComponent implements OnInit {
   }
 
   validarClienteCarpeta() {
-    this.carpetaService.validarCarpeta(this.tarea.cliente.id!).subscribe(
+    this.carpetaService.validarCarpeta(this.tarea.cliente.lpersona_id!).subscribe(
       (res: any) => {
         console.log(res);
         if (res.res == 'success') {

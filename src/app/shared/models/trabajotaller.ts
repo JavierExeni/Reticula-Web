@@ -2,9 +2,9 @@ import { Usuario } from './usuario';
 import { Cliente } from './clientes';
 
 export interface TrabajoTaller {
-  id?: number;
+  codigo_id?: number;
   cliente: {
-    id: number;
+    lpersona_id: number;
     nombre?: string;
   };
   referencia: string;
@@ -14,7 +14,7 @@ export interface TrabajoTaller {
   estado: number;
   bdeleted?: boolean;
   usuario: {
-    id: number;
+    codigo_id: number;
   };
   fecha?: Date;
   dtProceso?: Date;
@@ -27,7 +27,7 @@ export interface TrabajoTaller {
 
 
 export interface TrabajoTallerResponse {
-  id?: number;
+  codigo_id?: number;
   cliente: Cliente;
   referencia: string;
   equipo: string;

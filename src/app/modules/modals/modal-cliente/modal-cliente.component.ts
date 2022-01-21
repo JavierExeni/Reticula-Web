@@ -39,20 +39,22 @@ export class ModalClienteComponent implements OnInit {
   }
 
   getMantenimiento() {
-    this.tareaService.listByClienteMantenimiento(this.cliente.id!).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.mantenimientos = res;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this.tareaService
+      .listByClienteMantenimiento(this.cliente.lpersona_id!)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.mantenimientos = res;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   getTareas() {
     this.tareaService
-      .listByClienteTareasAsistencias(this.cliente.id!)
+      .listByClienteTareasAsistencias(this.cliente.lpersona_id!)
       .subscribe(
         (res: any) => {
           console.log(res);
@@ -65,7 +67,7 @@ export class ModalClienteComponent implements OnInit {
   }
 
   getEquipos() {
-    this.tallerService.listByCliente(this.cliente.id!).subscribe(
+    this.tallerService.listByCliente(this.cliente.lpersona_id!).subscribe(
       (res: any) => {
         this.equipos = res;
       },
@@ -76,7 +78,7 @@ export class ModalClienteComponent implements OnInit {
   }
 
   getDocuemntos() {
-    this.carpetaService.documentoByCliente(this.cliente.id!).subscribe(
+    this.carpetaService.documentoByCliente(this.cliente.lpersona_id!).subscribe(
       (res: any) => {
         this.documentos = res;
       },

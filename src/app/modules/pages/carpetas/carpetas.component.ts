@@ -73,7 +73,7 @@ export class CarpetasComponent implements OnInit {
     const carpeta: Carpeta = {
       nombre: this.palabra,
       cliente: {
-        id: this.cliente.id!,
+        lpersona_id: this.cliente.lpersona_id!,
       },
     };
 
@@ -177,7 +177,7 @@ export class CarpetasComponent implements OnInit {
   }
 
   validarClienteCarpeta() {
-    this.carpetaService.validarCarpeta(this.tarea.cliente.id!).subscribe(
+    this.carpetaService.validarCarpeta(this.tarea.cliente.lpersona_id!).subscribe(
       (res: any) => {
         console.log(res);
         if (res.res == 'success') {
@@ -211,7 +211,7 @@ export class CarpetasComponent implements OnInit {
 
   openModal(upload: any, carpeta: Carpeta) {
     //this.tareaSelected = tarea;
-    this.getDocuemntos(carpeta.id!);
+    this.getDocuemntos(carpeta.codigo_id!);
     this.modal.open(upload, { centered: true, backdrop: 'static', size: 'xl' });
   }
 

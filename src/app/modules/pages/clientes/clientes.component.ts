@@ -42,7 +42,7 @@ export class ClientesComponent implements OnInit {
     const { nombre } = this.formularioClientes.value;
     const cliente: Cliente = {
       nombre,
-      usuario: { id: this.authService.usuario.id! },
+      usuario: { codigo_id: this.authService.usuario.codigo_id! },
     };
 
     this.clienteService.insert(cliente).subscribe((res: any) => {

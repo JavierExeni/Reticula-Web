@@ -39,7 +39,7 @@ export class UsuariosComponent implements OnInit {
 
   saveUser() {
     const { correo, nombre, username, spassword } = this.authUser.value;
-    const user: Usuario = { correo, nombre, username, spassword };
+    const user: Usuario = { scorreo: correo, nombre, username, spassword };
 
     this.userService.insert(user).subscribe(
       (res) => {

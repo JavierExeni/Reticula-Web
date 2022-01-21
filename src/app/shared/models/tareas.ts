@@ -10,11 +10,11 @@ export interface Tareas {
   fecha_registro?: Date;
   fecha_limite?: string;
   cliente: {
-    id: number;
+    lpersona_id: number;
     nombre?: string;
   };
   usuario: {
-    id: number;
+    codigo_id: number;
   };
 }
 

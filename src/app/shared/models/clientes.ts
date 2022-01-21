@@ -1,7 +1,7 @@
 export interface Cliente {
-  id?: number;
+  lpersona_id?: number;
   nombre: string;
   usuario: {
-    id: number;
+    codigo_id: number;
   };
 }

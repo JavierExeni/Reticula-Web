@@ -1,6 +1,6 @@
 export interface Usuario {
-  id?: number;
-  correo: number;
+  codigo_id?: number;
+  scorreo: number;
   nombre: string;
   username: string;
   spassword: string;
