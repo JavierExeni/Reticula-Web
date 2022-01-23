@@ -86,7 +86,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let objTaller of equipos">
+          <tr
+            *ngFor="
+              let objTaller of equipos
+                | slice: (page - 1) * pageSize:page * pageSize
+            "
+          >
             <td [style]="getColorState(objTaller.estado)"></td>
             <td class="align-middle">{{ objTaller.codigo_id }}</td>
             <td class="align-middle">{{ objTaller.referencia }}</td>
@@ -99,6 +104,12 @@
           </tr>
         </tbody>
       </table>
+      <ngb-pagination
+        class="d-flex justify-content-center"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [collectionSize]="equipos.length"
+      ></ngb-pagination>
       <ng-template #nohay>
         <app-validationlist
           msg="No hay Trabajos en el taller registrados."
@@ -109,7 +120,10 @@
   <ng-container ngbNavItem>
     <a ngbNavLink>Ver Documentos</a>
     <ng-template ngbNavContent>
-      <table class="table table-striped" *ngIf="documentos.length > 0; else nohay">
+      <table
+        class="table table-striped"
+        *ngIf="documentos.length > 0; else nohay"
+      >
         <thead>
           <tr>
             <th scope="col">Titulo</th>
@@ -123,7 +137,13 @@
             <td class="align-middle">{{ documento.titulo }}</td>
             <td class="align-middle">{{ documento.tarea.nombre }}</td>
             <td class="align-middle">{{ documento.carpeta.nombre }}</td>
-            <td class="align-middle"> <a [href]="'http://localhost:8080/'+documento.path" target="_blank">Ver Documento</a> </td>
+            <td class="align-middle">
+              <a
+                [href]="'http://localhost:8080/' + documento.path"
+                target="_blank"
+                >Ver Documento</a
+              >
+            </td>
           </tr>
         </tbody>
       </table>

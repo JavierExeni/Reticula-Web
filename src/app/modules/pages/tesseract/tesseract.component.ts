@@ -56,6 +56,8 @@ export class TesseractComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.authService.usuario);
+
     this.getClientes();
     this.getTrabajos();
   }
@@ -79,7 +81,7 @@ export class TesseractComponent implements OnInit {
         todo,
         costo,
         cliente: { lpersona_id: this.cliente.lpersona_id! },
-        usuario: { codigo_id: this.authService.usuario.id! },
+        usuario: { codigo_id: this.authService.usuario.codigo_id! },
         estado: estado,
       };
     } else {
@@ -95,6 +97,10 @@ export class TesseractComponent implements OnInit {
         estado,
       };
     }
+
+    console.log('Taller: ');
+    console.log(taller);
+
 
     this.tallerService.insert(taller).subscribe(
       (res: any) => {

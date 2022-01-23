@@ -32,8 +32,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(body).subscribe(
       ({ res, data }: AuthResponse) => {
-        console.log(res, data);
-
         if (res === 'success') {
           this.router.navigate(['/menu']);
         } else {

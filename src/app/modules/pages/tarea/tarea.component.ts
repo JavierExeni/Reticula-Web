@@ -100,9 +100,24 @@ export class TareaComponent implements OnInit {
 
         if (action == 0) {
           this.registrarNotifiaction(
-            flag ? 'Actualizó una Tarea' : 'Registro una nueva Tarea',
+            flag
+              ? 'Actualizó una Tarea'
+              : `Se registró la tarea '${tarea.nombre}' para el cliente: '${tarea.cliente.nombre}' `,
             flag ? 0 : 1
           );
+          if (tarea.estado == 0) {
+            this.registrarNotifiaction(
+              `NUEVA ASISTENCIA - se registró una asistencia para el cliente: ${tarea.cliente.nombre} `,
+              0
+            );
+          }
+          if (tarea.estado == 1) {
+            this.registrarNotifiaction(
+              `NUEVA ASISTENCIA - se registró un mantenimiento para el ${tarea.fecha_limite} para el cliente: '${tarea.cliente.nombre}' `,
+              0
+            );
+          }
+
           Swal.fire({
             icon: 'success',
             title: flag ? 'Tarea Actualizada' : 'Tarea Registrada',

@@ -15,6 +15,9 @@ import { Documento } from '../../../shared/models/documento';
 export class ModalClienteComponent implements OnInit {
   @Input() cliente!: Cliente;
 
+  page = 1;
+  pageSize = 10;
+
   mantenimientos: Tareas[] = [];
   tareas: Tareas[] = [];
   equipos: TrabajoTallerResponse[] = [];

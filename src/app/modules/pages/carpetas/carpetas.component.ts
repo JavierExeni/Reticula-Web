@@ -82,7 +82,7 @@ export class CarpetasComponent implements OnInit {
         this.registrarNotifiaction('Registró un nueva Carpeta', 1);
         Swal.fire({
           icon: 'success',
-          title: 'Cliente Registrado',
+          title: 'Carpeta Registrada',
           showConfirmButton: false,
           timer: 2000,
         });
@@ -106,6 +106,7 @@ export class CarpetasComponent implements OnInit {
   saveClient(cliente: Cliente) {
     this.palabra = cliente.nombre;
     this.cliente = cliente;
+    this.clientesSugerencias = [];
   }
 
   saveTarea(tarea: TareasResponse) {

@@ -14,7 +14,7 @@ export class AuthService {
 
   private _usuario!: Usuario;
 
-  get usuario() {
+  get usuario(): Usuario {
     return this._usuario
       ? this._usuario
       : JSON.parse(localStorage.getItem('user')!);
@@ -35,7 +35,7 @@ export class AuthService {
           icon: 'error',
           title: 'Oops...',
           text: 'Credenciales Incorrectas!',
-        })
+        });
         return Observable.throw(err);
       })
     );
