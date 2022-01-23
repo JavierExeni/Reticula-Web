@@ -177,7 +177,7 @@ export class CarpetasComponent implements OnInit {
       .subscribe(
         (res: any) => {
           if (res.res == 'success') {
-            this.carpeta_id = res.data.id;
+            this.carpeta_id = res.data.codigo_id;
             this.upload();
           } else {
             Swal.fire('Ups!', res.data, 'error');

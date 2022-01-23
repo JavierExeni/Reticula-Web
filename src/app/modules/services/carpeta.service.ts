@@ -36,6 +36,11 @@ export class CarpetaService {
   subirDocumento(tarea: number, carpeta: number, file: File) {
     const url = `${this.baseUrl}anexos/insert`;
 
+    console.log(tarea, carpeta);
+    console.log(file);
+
+
+
     const fd = new FormData();
     fd.append('tarea', tarea.toString());
     fd.append('carpeta', carpeta.toString());
