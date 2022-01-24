@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthResponse } from 'src/app/shared/models/usuario';
-import { AuthService } from '../../auth.service';
-import { Login } from '../../../shared/models/usuario';
+import { AuthService } from '../auth.service';
+import { Login } from '../../shared/models/usuario';
 import { Router } from '@angular/router';
 
 @Component({

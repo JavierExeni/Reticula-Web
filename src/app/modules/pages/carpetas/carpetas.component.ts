@@ -59,6 +59,8 @@ export class CarpetasComponent implements OnInit {
   getDocuemntos(id: number) {
     this.carpetaService.documentoByCliente(id).subscribe(
       (res: any) => {
+        console.log(res);
+
         this.documentos = res;
       },
       (err) => {
@@ -206,7 +208,7 @@ export class CarpetasComponent implements OnInit {
 
   openModal(upload: any, carpeta: Carpeta) {
     //this.tareaSelected = tarea;
-    this.getDocuemntos(carpeta.codigo_id!);
+    this.getDocuemntos(carpeta.cliente.lpersona_id!);
     this.modal.open(upload, { centered: true, backdrop: 'static', size: 'xl' });
   }
 
