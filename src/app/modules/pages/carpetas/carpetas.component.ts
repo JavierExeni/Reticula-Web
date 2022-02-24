@@ -59,6 +59,8 @@ export class CarpetasComponent implements OnInit {
   getDocuemntos(id: number) {
     this.carpetaService.documentoByCliente(id).subscribe(
       (res: any) => {
+        console.log(res);
+
         this.documentos = res;
       },
       (err) => {

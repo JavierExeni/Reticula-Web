@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ValidateUserGuard } from './auth/guards/validate-user.guard';
 
 const routes: Routes = [
   {
@@ -8,7 +9,9 @@ const routes: Routes = [
   },
   {
     path: 'menu',
-    loadChildren: () => import('./modules/modules.module').then((m) => m.ModulesModule),
+    canActivate: [ValidateUserGuard],
+    loadChildren: () =>
+      import('./modules/modules.module').then((m) => m.ModulesModule),
   },
   {
     path: '**',
