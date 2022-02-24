@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { NotificationService } from '../../../modules/services/notification.service';
 import { fireNotification } from '../../models/notification';
 import { AuthService } from '../../../auth/auth.service';
+import { Usuario } from '../../models/usuario';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,7 @@ import { AuthService } from '../../../auth/auth.service';
 export class HeaderComponent implements OnInit {
 
   notifications: fireNotification[] = [];
+  usuarioLog!: string;
 
   constructor(
     private router: Router,
@@ -21,7 +23,11 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if(localStorage.getItem('user')===null){
+      this.router.navigate(['/auth']);
+    }
     this.getNotifications();
+    this.showUserOption();
   }
 
   getNotifications() {
@@ -33,7 +39,6 @@ export class HeaderComponent implements OnInit {
       )
     ).subscribe((data:any) => {
       console.log(data);
-
       this.notifications = data.filter((res: any) => res.user.codigo_id != this.authService.usuario.codigo_id).slice(data.length-5);
     });
   }
@@ -41,5 +46,14 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.router.navigate(['/auth']);
     localStorage.clear();
+  }
+
+  showUserOption(): string{
+    let user = localStorage.getItem('user');
+    if(user?.includes('admin')){
+      console.log('es admin');
+      return '';
+    }
+    return 'display: none';
   }
 }

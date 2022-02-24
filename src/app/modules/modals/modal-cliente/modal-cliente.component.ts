@@ -95,19 +95,19 @@ export class ModalClienteComponent implements OnInit {
     let color = 'red';
     switch (estado) {
       case 0:
-        color = 'rgb(29, 14, 109);';
+        color = '#1dae6d;';
         break;
       case 1:
-        color = 'rgb(31, 101, 232);';
+        color = '#1fb5e8;';
         break;
       case 2:
-        color = 'rgb(0, 128, 189);';
+        color = '#0080bd;';
         break;
       case 3:
-        color = 'gray;';
+        color = '#888888;';
         break;
       case -1:
-        color = 'rgb(255, 86, 57);';
+        color = '#ff5639;';
         break;
     }
 

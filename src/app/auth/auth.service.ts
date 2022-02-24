@@ -16,7 +16,7 @@ export class AuthService {
 
   get usuario(): Usuario {
     return this._usuario
-      ? this._usuario
+      ? {...this._usuario}
       : JSON.parse(localStorage.getItem('user')!);
   }
 
@@ -26,7 +26,6 @@ export class AuthService {
     const url = `${this.baseUrl}usuarios/login`;
     return this.http.post<AuthResponse>(url, login).pipe(
       tap((res) => {
-        console.log(res);
         localStorage.setItem('user', JSON.stringify(res.data));
         this._usuario = res.data;
       }),

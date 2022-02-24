@@ -12,7 +12,7 @@ export class NotificationService {
   private dbPath = '/eventos';
 
   private base_url =
-    'https://reticula-89c0f-default-rtdb.firebaseio.com/eventos.json';
+      'https://reticulaapp-default-rtdb.firebaseio.com/eventos.json';
 
   notificationRef: AngularFireList<fireNotification>;
 

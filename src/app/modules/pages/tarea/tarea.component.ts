@@ -259,7 +259,8 @@ export class TareaComponent implements OnInit {
     }
     this.tareas = [];
     this.auxtareas.filter((res: any) => {
-      if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
+      if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim()) ||
+          res.cliente.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
         this.tareas.push(res);
       }
     });

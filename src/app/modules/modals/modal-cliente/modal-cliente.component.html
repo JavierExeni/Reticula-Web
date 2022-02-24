@@ -97,7 +97,7 @@
             <td class="align-middle">{{ objTaller.referencia }}</td>
             <td class="align-middle">{{ objTaller.equipo }}</td>
             <td class="align-middle">{{ objTaller.problema }}</td>
-            <td class="align-middle">{{ objTaller.costo | currency }}</td>
+            <td class="text-end">Bs.{{ objTaller.costo }}</td>
             <td class="align-middle">
               {{ obtenerTipo(objTaller.tipo) | lowercase | titlecase }}
             </td>

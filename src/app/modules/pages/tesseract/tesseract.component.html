@@ -6,7 +6,7 @@
     orientation="vertical"
   >
     <li ngbNavItem="ver_lista">
-      <a ngbNavLink>Ver Lista</a>
+      <a ngbNavLink #listaTaller>Ver Lista</a>
       <ng-template ngbNavContent>
         <div class="card">
           <h5 class="card-header">Lista del Taller</h5>
@@ -98,12 +98,13 @@
                 <tr>
                   <th scope="col">Estado</th>
                   <th scope="col">R.A.T.A</th>
+                  <th scope="col">Cliente</th>
                   <th scope="col">Referencia</th>
                   <th scope="col">Equipo</th>
                   <th scope="col">Problema</th>
                   <th scope="col">Costo</th>
                   <th scope="col">Tipo</th>
-                  <th scope="col" class="text-center">Detalle</th>
+                  <th scope="col" class="text-center"></th>
                 </tr>
               </thead>
               <tbody>
@@ -114,11 +115,12 @@
                   "
                 >
                   <td [style]="getColorState(objTaller.estado)"></td>
-                  <td class="align-middle">{{ objTaller.codigo_id }}</td>
-                  <td class="align-middle">{{ objTaller.referencia }}</td>
-                  <td class="align-middle">{{ objTaller.equipo }}</td>
-                  <td class="align-middle">{{ objTaller.problema }}</td>
-                  <td class="align-middle">{{ objTaller.costo | currency }}</td>
+                  <td class="text-start">{{ objTaller.codigo_id }}</td>
+                  <td class="text-start">{{ objTaller.cliente.nombre }}</td>
+                  <td class="text-start">{{ objTaller.referencia }}</td>
+                  <td class="text-start">{{ objTaller.equipo }}</td>
+                  <td class="text-start">{{ objTaller.problema }}</td>
+                  <td class="text-end">Bs.{{ objTaller.costo }}</td>
                   <td class="align-middle">
                     {{ obtenerTipo(objTaller.tipo) | lowercase | titlecase }}
                   </td>

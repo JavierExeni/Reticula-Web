@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   TrabajoTaller,
@@ -21,9 +21,14 @@ import { fireNotification } from '../../../shared/models/notification';
   styles: [],
 })
 export class TesseractComponent implements OnInit {
+  
+  @ViewChild('listaTaller') btnVerLista!: ElementRef;
+  
   page = 1;
   pageSize = 10;
   clientesSugerencias: Cliente[] = [];
+
+
 
   palabra: string = '';
   cliente!: Cliente;
@@ -113,6 +118,9 @@ export class TesseractComponent implements OnInit {
             showConfirmButton: false,
             timer: 2000,
           });
+
+          this.btnVerLista.nativeElement.click();
+          
         } else {
           this.registrarNotifiaction(`R.A.T.A ${taller.codigo_id}, El equipo ${taller.equipo} del cliente ${taller.cliente.nombre} cambio de estado a ${ESTADOS[estado]}.` , 0);
           Swal.fire({
@@ -217,7 +225,7 @@ export class TesseractComponent implements OnInit {
         break;
     }
 
-    return `background-color:  ${color}`;
+    return `background-color: ${color}`;
   }
 
   obtenerTipo(tipo: string) {
@@ -259,7 +267,10 @@ export class TesseractComponent implements OnInit {
     }
     this.trabajos = [];
     this.auxtrabajos.filter((res: any) => {
-      if (res.referencia.toLowerCase().includes(termino.toLowerCase().trim())) {
+      if (res.referencia.toLowerCase().includes(termino.toLowerCase().trim()) ||
+          res.cliente.nombre.toLowerCase().includes(termino.toLowerCase().trim()) ||
+          res.equipo.toLowerCase().includes(termino.toLowerCase().trim())
+          ) {
         this.trabajos.push(res);
       }
     });

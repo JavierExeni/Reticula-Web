@@ -6,12 +6,13 @@ export const environment = {
   production: false,
   base_url: 'http://localhost:8080/',
   firebase: {
-    apiKey: 'AIzaSyBrfAk9j-SudtWRfh_juYGHCNIy2mkVVGk',
-    authDomain: 'reticula-89c0f.firebaseapp.com',
-    projectId: 'reticula-89c0f',
-    storageBucket: 'reticula-89c0f.appspot.com',
-    messagingSenderId: '933496911333',
-    appId: '1:933496911333:web:57bffaf9edbc4870a42b0c',
+    apiKey: "AIzaSyBDjon_qUKqj2LuaSior0YjBNEOW6uC86Y",
+    authDomain: "reticulaapp.firebaseapp.com",
+    databaseURL: "https://reticulaapp-default-rtdb.firebaseio.com",
+    projectId: "reticulaapp",
+    storageBucket: "reticulaapp.appspot.com",
+    messagingSenderId: "728700347492",
+    appId: "1:728700347492:web:cc62c18f785cd4140cab71"
   },
 };
 
