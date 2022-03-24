@@ -102,12 +102,13 @@ export class TareaComponent implements OnInit {
           }
         });
         if (action == 0) {
-          this.registrarNotifiaction(
-            flag
-              ? 'Actualizó una Tarea'
-              : `Se registró la tarea '${tarea.nombre}' para el cliente: '${cliente?.nombre}' `,
-            flag ? 0 : 1
-          );
+          if (flag) {
+            this.registrarNotifiaction(
+              `Actualizó una Tarea '${tarea.nombre}' para el cliente: '${cliente?.nombre}' `,
+              flag ? 0 : 1
+            );
+          }
+
           if (tarea.tipo == '0') {
             this.registrarNotifiaction(
               `NUEVA ASISTENCIA - se registró una asistencia para el cliente: ${cliente?.nombre} `,
