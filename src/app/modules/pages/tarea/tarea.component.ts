@@ -96,24 +96,28 @@ export class TareaComponent implements OnInit {
     }
     this.tareaService.insert(tarea).subscribe(
       (res) => {
-        this.formularioTareas.reset();
+        let cliente: Cliente | undefined = this.clientes.find((e: any) => {
+          if (tarea.cliente.lpersona_id == e.lpersona_id) {
+            return e;
+          }
+        });
 
         if (action == 0) {
           this.registrarNotifiaction(
             flag
               ? 'Actualizó una Tarea'
-              : `Se registró la tarea '${tarea.nombre}' para el cliente: '${tarea.cliente.nombre}' `,
+              : `Se registró la tarea '${tarea.nombre}' para el cliente: '${cliente?.nombre}' `,
             flag ? 0 : 1
           );
           if (tarea.estado == 0) {
             this.registrarNotifiaction(
-              `NUEVA ASISTENCIA - se registró una asistencia para el cliente: ${tarea.cliente.nombre} `,
+              `NUEVA ASISTENCIA - se registró una asistencia para el cliente: ${cliente?.nombre} `,
               0
             );
           }
           if (tarea.estado == 1) {
             this.registrarNotifiaction(
-              `NUEVA ASISTENCIA - se registró un mantenimiento para el ${tarea.fecha_limite} para el cliente: '${tarea.cliente.nombre}' `,
+              `NUEVA MANTENIMIENTO - se registró un mantenimiento para el ${tarea.fecha_limite} para el cliente: ${cliente?.nombre}`,
               0
             );
           }
@@ -136,6 +140,7 @@ export class TareaComponent implements OnInit {
             timer: 2000,
           });
         }
+        this.formularioTareas.reset();
         this.getTareas();
       },
       (err) => {
@@ -259,8 +264,10 @@ export class TareaComponent implements OnInit {
     }
     this.tareas = [];
     this.auxtareas.filter((res: any) => {
-      if (res.nombre.toLowerCase().includes(termino.toLowerCase().trim()) ||
-          res.cliente.nombre.toLowerCase().includes(termino.toLowerCase().trim())) {
+      if (
+        res.nombre.toLowerCase().includes(termino.toLowerCase().trim()) ||
+        res.cliente.nombre.toLowerCase().includes(termino.toLowerCase().trim())
+      ) {
         this.tareas.push(res);
       }
     });

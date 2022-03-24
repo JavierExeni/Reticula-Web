@@ -17,7 +17,7 @@ export class AuthService {
   get usuario(): Usuario {
     return this._usuario
       ? {...this._usuario}
-      : JSON.parse(localStorage.getItem('user')!);
+      : JSON.parse(sessionStorage.getItem('user')!);
   }
 
   constructor(private http: HttpClient) {}
@@ -26,7 +26,7 @@ export class AuthService {
     const url = `${this.baseUrl}usuarios/login`;
     return this.http.post<AuthResponse>(url, login).pipe(
       tap((res) => {
-        localStorage.setItem('user', JSON.stringify(res.data));
+        sessionStorage.setItem('user', JSON.stringify(res.data));
         this._usuario = res.data;
       }),
       catchError((err) => {
