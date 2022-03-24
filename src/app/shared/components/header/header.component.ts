@@ -23,9 +23,6 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(localStorage.getItem('user')===null){
-      this.router.navigate(['/auth']);
-    }
     this.getNotifications();
     this.showUserOption();
   }
@@ -39,19 +36,19 @@ export class HeaderComponent implements OnInit {
       )
     ).subscribe((data:any) => {
       console.log(data);
+
       this.notifications = data.filter((res: any) => res.user.codigo_id != this.authService.usuario.codigo_id).slice(data.length-5);
     });
   }
 
   logout() {
     this.router.navigate(['/auth']);
-    localStorage.clear();
+    sessionStorage.clear();
   }
 
   showUserOption(): string{
-    let user = localStorage.getItem('user');
+    let user = sessionStorage.getItem('user');
     if(user?.includes('admin')){
-      console.log('es admin');
       return '';
     }
     return 'display: none';
