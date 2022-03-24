@@ -101,7 +101,6 @@ export class TareaComponent implements OnInit {
             return e;
           }
         });
-
         if (action == 0) {
           this.registrarNotifiaction(
             flag
@@ -109,13 +108,13 @@ export class TareaComponent implements OnInit {
               : `Se registró la tarea '${tarea.nombre}' para el cliente: '${cliente?.nombre}' `,
             flag ? 0 : 1
           );
-          if (tarea.estado == 0) {
+          if (tarea.tipo == '0') {
             this.registrarNotifiaction(
               `NUEVA ASISTENCIA - se registró una asistencia para el cliente: ${cliente?.nombre} `,
               0
             );
           }
-          if (tarea.estado == 1) {
+          if (tarea.tipo == '1') {
             this.registrarNotifiaction(
               `NUEVA MANTENIMIENTO - se registró un mantenimiento para el ${tarea.fecha_limite} para el cliente: ${cliente?.nombre}`,
               0
