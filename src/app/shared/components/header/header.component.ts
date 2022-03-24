@@ -23,9 +23,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(localStorage.getItem('user')===null){
-      this.router.navigate(['/auth']);
-    }
+    
     this.getNotifications();
     this.showUserOption();
   }
